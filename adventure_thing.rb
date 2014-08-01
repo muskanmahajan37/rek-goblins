@@ -38,10 +38,10 @@ def new_game
   @player = Player.new(gets.chomp)
   @enemy = Enemy.new()
   @battle = Battle.new(@player, @enemy)
-  new_battle(@battle)
+  new_battle
 end
 
-def messages
+def current_turn
   if @player.turn
     puts @player.name + "'s turn."
   else
@@ -50,9 +50,12 @@ def messages
   ws
 end
 
+def message
+  puts @msg
+end
+
 def enemy_pic
- puts "
-             ,      ,\r\n            \/(.-\"\"-.)\\\r\n        |\\  \\\/      \\\/  \/|\r\n        | \\ \/ =.  .= \\ \/ |\r\n        \\( \\   o\\\/o   \/ )\/\r\n         \\_, \'-\/  \\-\' ,_\/\r\n           \/   \\__\/   \\\r\n           \\ \\__\/\\__\/ \/\r\n         ___\\ \\|--|\/ \/___\r\n       \/`    \\      \/    `\\\r\n      \/       \'----\'       \\
+ puts "            \/(.-\"\"-.)\\\r\n        |\\  \\\/      \\\/  \/|\r\n        | \\ \/ =.  .= \\ \/ |\r\n        \\( \\   o\\\/o   \/ )\/\r\n         \\_, \'-\/  \\-\' ,_\/\r\n           \/   \\__\/   \\\r\n           \\ \\__\/\\__\/ \/\r\n         ___\\ \\|--|\/ \/___\r\n       \/`    \\      \/    `\\\r\n      \/       \'----\'       \\
    "
 end
 
@@ -74,16 +77,42 @@ def player_status
   puts "LVL: " + @player.level.to_s
 end
 
-def new_battle battle
+def display
   header
-  messages
+  current_turn
+  message
   enemy_pic
   enemy_status
   ws
   ws
   player_pic
   player_status
+  ws
+end
 
+def new_battle
+  while @player.current_health > 0 && @enemy.current_health > 0 do
+    display
+    if @player.turn == true
+      puts "A > Attack"
+      puts "H > Heal"
+      main_choice = gets.chomp.upcase
+        if main_choice == "A"
+          @player.attack(@enemy)
+        elsif main_choice == "H"
+          @player.heal
+        else
+          system 'clear'
+          puts "Invalid input! Try again"
+        end
+    else
+      sleep 1
+      @enemy.attack(@player)
+      @msg = @enemy.name + "has attacked!"
+    end
+    @battle.next_turn(@player)
+  end
+  main_menu
 end
 
 main_menu
