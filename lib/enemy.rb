@@ -1,32 +1,24 @@
-class Enemy
-  attr_reader :name, :level
-  attr_accessor :health, :power
+class Enemy < Fighter
 
-  def initialize name
-    @name = name
-    @health = 10
-    @power = 3
-    @level = 1
+  attr_reader :xp_value, :name_array
+
+  def initialize
+    super(random_name)
     @xp_value = 1
   end
 
-  def attack target
-    target.health -= @power
-  end
-
-  def crit_chance
-    if rand(16) == 15
-
-    end
-  end
-
-  def heal
-    @health += 2
-  end
-
   def give_xp target
-    if @health == 0
+    if @current_health == 0
       target.xp += @xp_value
     end
   end
+
+  def random_name
+    @name_array = ["Cleaverrot", "Foulshred", "Sickarse", "Demonstomach", "Murdergouge"]
+    get_name = @name_array.at(rand(@name_array.length + 1))
+    get_name
+  end
+
+
+
 end
