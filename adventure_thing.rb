@@ -78,9 +78,10 @@ def player_status
 end
 
 def display
-  header
+  system 'clear'
   current_turn
   message
+  ws
   enemy_pic
   enemy_status
   ws
@@ -99,6 +100,7 @@ def new_battle
       main_choice = gets.chomp.upcase
         if main_choice == "A"
           @player.attack(@enemy)
+          @msg = "You attack " + @enemy.name + "!"
         elsif main_choice == "H"
           @player.heal
         else
@@ -108,9 +110,13 @@ def new_battle
     else
       sleep 1
       @enemy.attack(@player)
-      @msg = @enemy.name + "has attacked!"
+      @msg = @enemy.name + " has attacked!"
     end
     @battle.next_turn(@player)
+  end
+  if @player.current_health > 0 && @enemy.current_health <= 0
+    @msg = @player.name + "is victorious!"
+    sleep 1
   end
   main_menu
 end

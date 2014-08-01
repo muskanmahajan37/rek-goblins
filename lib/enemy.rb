@@ -15,7 +15,7 @@ class Enemy < Fighter
 
   def random_name
     @name_array = ["Cleaverrot", "Foulshred", "Sickarse", "Demonstomach", "Murdergouge"]
-    get_name = @name_array.at(rand(@name_array.length + 1))
+    get_name = @name_array.at(rand(@name_array.length))
     get_name
   end
 
